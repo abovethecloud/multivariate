@@ -81,11 +81,11 @@ d<- rep(0,n) # Mahalanobis distance
 for(i in 1:n) d[i]<- c(t(D[i,])%*%solve(S)%*%as.matrix(D[i,])) 
 round(d,3)
 
-panel.ellipse1_alpha <- function(x, y, el.level = 1-alpha, ...){
-  panel.ellipse(x, y, el.level = el.level, ...)
+panel.ellipse1_alpha <- function(x, y, ...){
+  panel.ellipse(x, y, el.level = 1-alpha, ...)
 }
 
-alpha<-0.3
+alpha<-0.1
 qchisq(alpha,df=3)
 norm_check<- sum(d<=qchisq(alpha,df=3))/n
 pairs(scale(socio), lower.panel = panel.cor, upper.panel = panel.ellipse1_alpha, diag.panel=panel.hist)  

@@ -4,8 +4,8 @@ library(mvtnorm)
 library(lattice)
 library(SciViews)
 
-panel.ellipse1_alpha <- function(x, y, el.level = 1-alpha, ...){
-  panel.ellipse(x, y, el.level = el.level, ...)
+panel.ellipse1_alpha <- function(x, y, ...){
+  panel.ellipse(x, y, el.level = 1-alpha, ...)
 }
 
 mu<- c(1, -1, 2)
