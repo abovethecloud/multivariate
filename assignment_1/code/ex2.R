@@ -4,6 +4,9 @@ library(mvtnorm)
 library(lattice)
 library(SciViews)
 
+panel.ellipse1_alpha <- function(x, y, el.level = 1-alpha, ...){
+  panel.ellipse(x, y, el.level = el.level, ...)
+}
 
 mu<- c(1, -1, 2)
 Sigma<-matrix(c(1, -1/2, -1/4, -1/2, 1, -1/4, -1/4, -1/4, 1), 3, 3)
@@ -39,6 +42,6 @@ for(i in 1:1000) d[i]<- c(t(D[i,])%*%solve(Sigma_1)%*%as.matrix(D[i,]))
 round(d,3)
 norm_check<- sum(d<=qchisq(alpha,df=2))/1000
 round(norm_check,3)
-pairs(scale(X_cond), lower.panel = panel.cor, upper.panel = panel.ellipse1, el.level = 1-alpha, diag.panel=panel.hist, pch = 16)
+pairs(scale(X_cond), label = NULL,lower.panel = panel.cor, upper.panel = panel.ellipse1_alpha, diag.panel=panel.hist, pch = 16)
 lines(ellipse(Sigma_1,mu_1,0.9), col ="red", lwd=1.5)
 

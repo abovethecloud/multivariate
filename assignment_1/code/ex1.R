@@ -29,14 +29,12 @@ R
 # mentre V3 pare essere debolmente correlata a V2.
 
 # Plotting the boxplots on the same scale
-boxplot(socio$V2, socio$V3, socio$V4, names = c("V2", "V3", "V4"), main = "Boxplots")
-
+boxplot(socio$V2, socio$V3, socio$V4, names = c("x2", "x3", "x4"), main = "Boxplots", col = "red", border = 1, outcol="blue", outpch = 16)
 # Plotting the boxplots with stretched axes
 par(mfrow = c(1, 3))
-boxplot(socio$V2, names = c("V2"), main = "Boxplot V2")
-boxplot(socio$V3, names = c("V3"), main = "Boxplot V3")
-boxplot(socio$V4, names = c("V4"), main = "Boxplot V4")
-
+boxplot(socio$V2, names = c("V2"), main = "Boxplot x2", col = "red", border = 1, outcol="blue", outpch = 16)
+boxplot(socio$V3, names = c("V3"), main = "Boxplot x3", col = "red", border = 1, outcol="blue", outpch = 16)
+boxplot(socio$V4, names = c("V4"), main = "Boxplot x4", col = "red", border = 1, outcol="blue", outpch = 16)
 # Getting the values of outliers
 outV2 = boxplot.stats(socio$V2)$out
 outV3 = boxplot.stats(socio$V3)$out
@@ -48,19 +46,25 @@ index_outV4 = which(socio$V4 == outV4, arr.ind = T)
 # Corrispondono alla 34esima osservazione per quanto riguarda V3 e alla 47esima per quanto riguarda V4.
 
 par(mfrow= c(3,1))
-qqnorm(socio$V2, main = "Q-Q plot for V2")
+qqnorm(socio$V2, main = "Q-Q plot for x2", pch = 16)
 qqline(socio$V2, col = 2)
-qqnorm(socio$V3, main = "Q-Q plot for V3")
+qqnorm(socio$V3, main = "Q-Q plot for x3", pch = 16)
 qqline(socio$V3, col = 2)
-qqnorm(socio$V4, main = "Q-Q plot for V4")
+qqnorm(socio$V4, main = "Q-Q plot for x4", pch = 16)
 qqline(socio$V4, col = 2)
 
 # Interpretazione dei normal plots: tutte e 3 le variabili paiono avere un andamento simil gaussiano, anche se vi sono problemi agli estremi.
 
 
 col.index<-rep(1,61)
-col.index[outV3]<-2; col.index[outV4]<-4
-pairs(scale(socio), lower.panel = panel.cor, col = col.index, pch=16)
+pch.index <- rep(16, 61)
+cex.index <- rep(1, 61)
+col.index[index_outV3]<-2; col.index[index_outV4]<-4
+pch.index[index_outV3]<-15; pch.index[index_outV4]<-15
+cex.index[index_outV3]<-1.2; cex.index[index_outV4]<-1.2
+
+
+pairs(scale(socio), labels = c("x2", "x3", "x4"), lower.panel = NULL, col = col.index, pch=pch.index, cex = cex.index)
 
 
 # Interpretazione degli scatterplots bivariati: la 34esima osservazione viene rilevata come outlier
@@ -90,7 +94,7 @@ round(norm_check,3)
 # norm_check si discosta poco dal 50%, il che tende a far accettare la normalit? multivariata.
 
 par(mfrow= c(1,1))
-plot(qchisq(ppoints(d), df=3), sort(d), pch=16, main = "Socio data", ylab = "d")
+plot(qchisq(ppoints(d), df=3), sort(d), pch=16, main = "Chi-square Q-Q plot of Mahalanobis distance", ylab = "d")
 abline(0, 1, col = 2)
 
 # Il pattern chi quadro sembra essere soddisfatto da tutte le osservazioni tranne 2, che si discostano sensibilmente.
@@ -105,5 +109,19 @@ round(sort(d), 3)
 col.index[6]<- 5; col.index[48]<-3; col.index[49]<-6
 pairs(scale(socio), lower.panel = panel.cor, col = col.index, pch = 16)
 
-plot3d(socio$V2, socio$V3, socio$V4, col = col.index)
+plot3d(socio$V2, socio$V3, socio$V4, xlab = "x2", ylab = "x3", zlab = "x4", col = col.index, pch = pch.index, cex = cex.index)
 # snapshot3d(nomefile.png)
+
+bmatrix = function(x, digits=3, ...) {
+  library(xtable)
+  default_args = list(include.colnames=FALSE, only.contents=TRUE,
+                      include.rownames=FALSE, hline.after=NULL, comment=FALSE,
+                      print.results=FALSE)
+  passed_args = list(...)
+  calling_args = c(list(x=xtable(x, digits=digits)),
+                   c(passed_args,
+                     default_args[setdiff(names(default_args), names(passed_args))]))
+  return(cat("\\begin{bmatrix}\n",
+             do.call(print.xtable, calling_args),
+             "\\end{bmatrix}"))
+}
