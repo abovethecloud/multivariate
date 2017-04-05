@@ -67,7 +67,7 @@ vignettes/*.pdf
 *.mtc1
 *.out
 *.synctex.gz
-*.pdf
+# *.pdf # Uncomment to exclude .pdf
 
 
 
