@@ -19,9 +19,9 @@ socio$V4 <- log(socio$V4)
 # Computing sample mean vector, covariance and correlation matrices
 mean<- round(colMeans(socio), 3)
 mean
-S<- round(cov(socio), 3)
+S <- round(cov(socio), 3)
 S
-R<- round(cor(socio), 3)
+R <- round(cor(socio), 3)
 R
 
 # Interpretazione della matrice R: lungo la diagonale trovo la correlazione delle variabili con s? stesse, quindi ? giusto che torni 1.
@@ -38,13 +38,14 @@ boxplot(socio$V3, names = c("V3"), main = "Boxplot V3")
 boxplot(socio$V4, names = c("V4"), main = "Boxplot V4")
 
 # Getting the values of outliers
-boxplot.stats(socio$V2)$out
-boxplot.stats(socio$V3)$out
-boxplot.stats(socio$V4)$out
+outV2 = boxplot.stats(socio$V2)$out
+outV3 = boxplot.stats(socio$V3)$out
+index_outV3 = which(socio$V3 == outV3, arr.ind = T)
+outV4 = boxplot.stats(socio$V4)$out
+index_outV4 = which(socio$V4 == outV4, arr.ind = T)
 
 # Non sembrano esserci outliers univarati per quanto riguarda V2, mentre ne vengono rilevati uno a testa per V3 e V4
 # Corrispondono alla 34esima osservazione per quanto riguarda V3 e alla 47esima per quanto riguarda V4.
-# TODO: Automatically find the number of the observations (outliers)
 
 par(mfrow= c(3,1))
 qqnorm(socio$V2, main = "Q-Q plot for V2")
@@ -58,7 +59,7 @@ qqline(socio$V4, col = 2)
 
 
 col.index<-rep(1,61)
-col.index[34]<-2; col.index[47]<-4
+col.index[outV3]<-2; col.index[outV4]<-4
 pairs(scale(socio), lower.panel = panel.cor, col = col.index, pch=16)
 
 
@@ -96,7 +97,9 @@ round(d,3)
 # il fatto che siano outliers. Notare che anche l'osservazione 6 ha una distanza insolitamente alta, sebbene non 
 # quanto le altre 2.
 # Inoltre si discostano dalle altre anche la 48esima e 49esima osservazione, con distanza di Malhanobis intorno all'8
-
+round(sort(d), 3)
 col.index[6]<- 5; col.index[48]<-3; col.index[49]<-6
 pairs(scale(socio), lower.panel = panel.cor, col = col.index, pch = 16)
-round(sort(d), 3)
+
+plot3d(socio$V2, socio$V3, socio$V4, col = col.index)
+# snapshot3d(nomefile.png)
