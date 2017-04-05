@@ -1,0 +1,8 @@
+Latex:
+1) Put an introduction to the latex assignment (specifying: approx to 3 digits, the use of R..)
+2) Put introductions to each Exercise
+3) Check grammar and put more comments
+
+R code:
+1) Create package for function that translates R matrices in latex code
+2) Create package for panel.ellipse1(x, y, ...) function (in Ex1.R and Ex3.R) 
