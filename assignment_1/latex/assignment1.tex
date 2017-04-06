@@ -61,7 +61,7 @@
 
 \graphicspath{ {img/} }
 
-\title{First Assignment Multivariate Statistical Analysis}
+\title{Multivariate Statistical Analysis \\ First Assignment}
 \author{Claudio Peroni}
 \date{}
 
@@ -178,6 +178,7 @@ The first exercise consists in the analysis of three socioeconomic variables ($x
 
 \newpage
 \section*{Exercise 2}
+For the second exercise we have to consider a multivariate normal distributed random variable $X = (X_1, X_2, X_3)$, with given mean vector $\mu$ and covariance matrix $\Sigma$.
 \subsection*{2.1)}
 	We have to compute the distribution of $X_3|(X_1, X_2) = (x_1, x_2)$.
 	In order to do so, we apply the following general formulas:
@@ -215,6 +216,8 @@ The first exercise consists in the analysis of three socioeconomic variables ($x
 
 \newpage
 \section*{Exercise 3}
+Once again we consider the \texttt{socio} data set. This time no log transformation is applied, and we work with all the variables $x_1,\dots, x_5$.
+The aim of the exercise is to perform a PCA similar to the one seen in class, with the difference of the standardised data, and to see the differences.
 \subsection*{3.1)}
 	We perform the Principal Component Analysis on the standardised variables of the \textit{socio} dataset. The result is the following:
 	\begin{figure}[H]
@@ -270,5 +273,6 @@ The first exercise consists in the analysis of three socioeconomic variables ($x
 	Concerning the Cumulative Proportion explained by the Principal Components, we see that the first two PCs are enough to account for more than 90\% of the total variance, while in our analysis we need 4 PCs to reach a similar explanation proportion.
 	This difference is due to the standardisation of our data. With non-standardised data the variables which have greater variance tend to \textit{weigh} more in the cumulative proportion, and from Figure \ref{img:importance_4} it's clear how the variance of the first Principal Component (and, though less, of the Second) dominates the others, with a value over 100 (in comparison the variance of PC3 is roughly 8.5).
 
+The conclusion about PCA with and without standardised data is the following: while we have the impression that without standardised data less principal components are able to account for more variance, this could lead to conceptual errors. In general it is a good idea to standardise data (as is suggested also by the documentation of the default R function).
 	
 \end{document}
