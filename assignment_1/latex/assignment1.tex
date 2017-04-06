@@ -20,6 +20,11 @@
 \usepackage{graphicx}
 \usepackage{tikz-cd}
 \usepackage{amsthm}
+\usepackage{listings}
+
+
+\usepackage{varwidth}
+
 
 \usetikzlibrary{arrows}
 \usetikzlibrary{matrix}
@@ -33,8 +38,6 @@
 \newtheorem{lemma}[teor]{Lemma}
 \newtheorem{coroll}[teor]{Corollary}
 \newtheorem{es}{Example}[chapter]
-
-
 
 
 
@@ -64,11 +67,12 @@
 
 \begin{document}
 \maketitle
-
+The following exercises are performed on the datasets provided using R and open-source packages. In the visualisation of data, every value has been rounded to 3 decimal digits for simplicity.
 \section*{Exercise 1}
+The first exercise consists in the analysis of three socioeconomic variables ($x_2$, $x_3$, $x_4$) of the  \texttt{socio} dataset, containing 5 variables and 61 observations. The main point of the analysis is to comment about normality of the (logarithm of) data and to find and visualise outliers (both univariate and multivariate).
 \subsection*{1.1)}
 	We begin by taking the log transformation of the variables $x_2$, $x_3$, $x_4$.
-	From now on we will refer to the logarithm of the variables using the name of the variables themselves.
+	\textbf{From now on we will refer to the logarithm of the variables using the name of the variables themselves}.
 
 \subsection*{1.2)}
 	We compute the sample mean, variance and correlation of the variables using the built-in R commands.
@@ -79,24 +83,24 @@
 	  1.121 \\ 
 	  4.263 \\ 
 	  3.244 \\ 
-	   \end{bmatrix}\\
+	   \end{bmatrix} \nonumber \\
 	S &=
 	\begin{bmatrix}
 	  0.525 & 0.003 & 0.086 \\ 
 	  0.003 & 0.012 & -0.013 \\ 
 	  0.086 & -0.013 & 0.091 \\ 
-	   \end{bmatrix}\\
+	   \end{bmatrix} \nonumber \\
 	R &= \begin{bmatrix}
 	  1.000 & 0.043 & 0.393 \\ 
 	  0.043 & 1.000 & -0.400 \\ 
 	  0.393 & -0.400 & 1.000 \\ 
-	   \end{bmatrix}
+	   \end{bmatrix} \nonumber
 	\end{align}
-	The first thing we notice in the matrix of the variances and covariances $S$ is that the variance of $x_2$ is greater by one order of magnitude than the other two variances.
+	The first thing we notice in the matrix of the variances and covariances $S$ is that the variance of $x_2$ is greater than the other two variances by one order of magnitude.
 	By looking at the correlation matrix $R$ we note that the correlation between $x_2$ and $x_4$ is almost the same of the one between $x_3$ and $x_4$ (in absolute value), while the correlation between $x_2$ and $x_3$ is almost negligible.
 \subsection*{1.3)}
-	First we plot the boxplot of all the variables together. This graph shows that the range of the variables is quite different. Then we plot the boxplot of each variable separately in order to highlight the outliers.
-	We find that both the second and the third variable have one outlier each. They are respectively the 34th and 47th observation. It appears that there is no univariate outlier for the first variable.
+	First we plot the boxplot of all the variables together. This graph shows that the range of the variables is quite different. Then we plot the boxplot of each variable separately in order to highlight the respective outliers.
+	We find that both the second and the third variables have one outlier each. They are respectively the 34th and 47th observation. It appears that there is no univariate outlier for the first variable.
 	\begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm, height=8cm]{boxplot_same_scale.png}
@@ -122,12 +126,12 @@
 	\includegraphics[scale = 0.5]{pairs_scatterplot1_ex1.png}
 	\caption{Scatterplots for the variables. In blue the outlier for $x_4$ and in red the outlier for $x_3$.}
 	\end{figure}
-	The univariate outliers we found for $x_3$ and $x_4$ are still visible in the bivariate representation of the scatterplots when the variable for which they are univariate outliers is plotted against another.
+	The univariate outliers we found for $x_3$ and $x_4$ are still visible in the bivariate representation of the scatterplots when the variable for which they are univariate outliers is plotted against another (\textit{i.e.} when $x_3$ and $x_4$ are plotted against $x_2$, their respective outliers tend to disappear in the cloud). Furthermore, we notice other observations far from the clouds centers that could be potential outliers. See Ex. 1.8).
 
 \subsection*{1.6)}
 	To compute the squared Mahalanobis distance $d^2$ we use the formula:
 	\begin{align}
-	d^2 = (x_i - \bar x)^T \mathbf{S}^{-1} (x_i - \bar x)
+	d^2 = (x_i - \bar x)^T \mathbf{S}^{-1} (x_i - \bar x) \nonumber
 	\end{align}
 	The result is:
 	\begin{figure}[H]
@@ -145,23 +149,31 @@
 	
 \subsection*{1.8)}
 	To find other candidates outliers we sort the $d^2$ distances and look for unusually large or small values.
-	\begin{figure}[h]
+	
+	\begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.55]{sorted_d.png}
+	\begin{varwidth}{\linewidth}
+	\verbatiminput{"codeverbatim/sorted_Mahalanobis.txt"}
+	\end{varwidth}
 	\caption{The sorted $d^2$ distances.}
+	\label{img:sorted_Mahalanobis}
 	\end{figure}
-	We see that 5 observations present unusually large distances. They are the 6th, 34th, 47th, 48th, 49th observations. We had already classified as outliers two of them (the 34th and 47th) during the univariate analysis.
-	In order to visualise these 3-dimensional outliers we use a 3D-scatterplot. Here we have coloured all the 5 outliers found.
+	We see that 5 observations present large distances with respect to the others. They are the 6th, 34th, 47th, 48th, 49th observations. We had already classified as outliers two of them (the 34th and 47th) during the univariate analysis, and imagined the existence of the others from the 2D scatterplots.
+	In order to try and visualise these 3-dimensional outliers (obtained from the Mahalanobis distance analysis) we use a 3D-scatterplot. Here we have painted in different colours all the 5 outliers found. Though on paper is difficult to see how far the points are from the cloud, Figures \ref{img:3Dscatter1} and \ref{img:3Dscatter2} provide good perspectives.
 	\newline
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale = 0.55]{3dplot1.png}
+	\begin{varwidth}{\linewidth}
+	\includegraphics[scale = 0.68]{3dplot1.png}
+	\end{varwidth}
 	\caption{3D scatterplot of the data.}
+	\label{img:3Dscatter1}
 	\end{figure}
 	\begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.55]{3dplot2.png}
+	\includegraphics[scale = 0.68]{3dplot2.png}
 	\caption{3D scatterplot of the data from a different perspective.}
+	\label{img:3Dscatter2}
 	\end{figure}
 
 \newpage
@@ -175,8 +187,8 @@
 	\end{align}
 	to our case (where $a = (x_1, x_2)$). The result is:
 	\begin{align}
-		\bar \mu_3 &= 2 - \frac{1}{2}x_1 - \frac{1}{2}x_2\\
-		\bar \Sigma_3 &= \frac{3}{4}
+		\bar \mu_3 &= 2 - \frac{1}{2}x_1 - \frac{1}{2}x_2 \nonumber \\
+		\bar \Sigma_3 &= \frac{3}{4} \nonumber
 	\end{align}
 	Therefore, we conclude that $X_3|(X_1, X_2) = (x_1, x_2)$ is distributed as a normal with mean $\bar \mu_3$ and variance $\bar \Sigma_3$.
 	
@@ -184,12 +196,12 @@
 	Again we use (\ref{eq:cond_mean}) and (\ref{eq:cond_Sigma}) to compute the distribution of $$(X_1, X_2)|X_3 = x_3 = 0$$
 	We get:
 	\begin{align}
-		\bar \mu_{12} &= \left(\frac{3}{2}, -\frac{1}{2} \right)\\
+		\bar \mu_{12} &= \left(\frac{3}{2}, -\frac{1}{2} \right) \nonumber \\
 		\bar \Sigma_{12} &= 
 			\begin{bmatrix}
 	  			\dfrac{15}{16} & -\dfrac{9}{16}\\[2ex]
 	 			-\dfrac{9}{16} & \dfrac{15}{16}\\[2ex]
-	  		\end{bmatrix}
+	  		\end{bmatrix} \nonumber
 	\end{align}
 	Once more, we conclude that $(X_1, X_2)|X_3 = x_3 = 0$ is distributed as $N(\bar \mu_{12}, \bar \Sigma_{12})$.
 	Then, we sketch the ellipse $$ (x - \bar \mu_{12})^T \bar \Sigma_{12}^{-1} (x - \bar \mu_{12}) = \chi^{2}_{2,\alpha}$$
@@ -197,7 +209,7 @@
 	
 	\begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.55]{pairs_ellipse.png}
+	\includegraphics[scale = 0.5]{pairs_ellipse.png}
 	\caption{Scatterplot of data with ellipse (of level $\alpha = 0.1$), univariate histograms, and correlation between the variables.}
 	\end{figure}
 
@@ -207,7 +219,9 @@
 	We perform the Principal Component Analysis on the standardised variables of the \textit{socio} dataset. The result is the following:
 	\begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.8]{PCA_socio.png}
+	\begin{varwidth}{\linewidth}
+	\verbatiminput{"codeverbatim/socio_rotation.txt"}
+	\end{varwidth}
 	\caption{Rotation matrix.}
 	\label{fig:rot}
 	\end{figure}
@@ -216,39 +230,45 @@
 \subsection*{3.2)}
 	\begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.8]{importance_pca.png}
+	\begin{varwidth}{\linewidth}
+	\verbatiminput{"codeverbatim/importance_matrix.txt"}
+	\end{varwidth}
 	\caption{The \textit{importance matrix} of the principal components.}
 	\end{figure}
-	The cumulative proportion of variance explained by the first two PCs is $0.672$.
+	The cumulative proportion of variance explained by the first two PCs is $0.672$ ($< 70\%$). To explain $\sim 85\%$ of the variance, 3 principal components are needed.
 
 \subsection*{3.3)}
 	\begin{figure}[H]
 	\centering
 	\includegraphics[height = 11cm, width = 15cm]{screeplot_bar.png}
-	\caption{Screeplot (type "barplot") of the PCs. In blue and red the suggested tresholds.}
+	\caption{Screeplot (of type "barplot") of the PCs. In blue and red the suggested tresholds.}
 	\end{figure}
 	From the screeplot and the importance matrix we can see that 3 PCs are enough to explain more than 80\% of the variance. For many uses this is probably enough. If we add one more PC, we are able to account for $\sim95\%$ of the total variance, so in some cases this might be the best choice.
 \subsection*{3.4)}
 	First we retrieve the PCA results from Lecture 4.
 	\begin{figure}[H]
 	\centering
-	\includegraphics{pca_De_Blasi.png}
-	\caption{Principal Component rotation matrix from Lecture 4 as comparison. Here data are \textit{not} standardised.}
+	\begin{varwidth}{\linewidth}
+	\verbatiminput{"codeverbatim/socio_rotation_4.txt"}
+	\end{varwidth}	\caption{Principal Component rotation matrix from Lecture 4 as comparison. Here data are \textit{not} standardised.}
 	\end{figure}
 	This rotation matrix suggests that the first component can be seen as an explanatory variable for $x_4$, while the second principal component for $x_3$ (and a similar relation can be found between the other 3 PCs with the remaining variables). The link between each PC and one of the original variables is more evident here than in our analysis, see Figure \ref{fig:rot}.
 	\begin{figure}[H]
 	\centering
-	\includegraphics{pca_De_Blasi_importance.png}
+	\begin{varwidth}{\linewidth}
+	\verbatiminput{"codeverbatim/importance_matrix_4.txt"}
+	\end{varwidth}
 	\caption{The \textit{importance matrix} of the principal components from PCA in Lecture 4.}
+	\label{img:importance_4}
 	\end{figure}
 	\begin{figure}[H]
 	\centering
 	\includegraphics[height = 8cm, width = 13cm]{screeplot_bar_De_Blasi.png}
-	\caption{A Graphical visualisation of the cumulative proportion of variance explained bye the PCs (bar screeplot). In blue the obvious cutoff.}
+	\caption{A Graphical visualisation of the cumulative proportion of variance explained by the PCs (bar screeplot). In blue the obvious suggested cutoff.}
 	\end{figure}
 	
 	Concerning the Cumulative Proportion explained by the Principal Components, we see that the first two PCs are enough to account for more than 90\% of the total variance, while in our analysis we need 4 PCs to reach a similar explanation proportion.
-	This difference is due to the standardisation of our data. With non-standardised data the variables which have greater variance tend to \textit{weigh} more in the cumulative proportion.
+	This difference is due to the standardisation of our data. With non-standardised data the variables which have greater variance tend to \textit{weigh} more in the cumulative proportion, and from Figure \ref{img:importance_4} it's clear how the variance of the first Principal Component (and, though less, of the Second) dominates the others, with a value over 100 (in comparison the variance of PC3 is roughly 8.5).
 
 	
 \end{document}

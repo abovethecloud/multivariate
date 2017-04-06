@@ -1,0 +1,6 @@
+> round(summary(socio.pca)$importance,3)
+
+                          PC1   PC2   PC3   PC4   PC5
+Standard deviation     10.416 6.352 2.910 1.698 0.395
+Proportion of Variance  0.677 0.252 0.053 0.018 0.001
+Cumulative Proportion   0.677 0.928 0.981 0.999 1.000
